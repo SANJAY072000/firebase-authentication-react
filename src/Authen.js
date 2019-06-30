@@ -19,8 +19,8 @@ export default class Authen extends Component {
       err:''
     };
     this.login=this.login.bind(this);
-    // this.signup=this.signup.bind(this);
-    // this.logout=this.logout.bind(this);
+    this.signup=this.signup.bind(this);
+    this.logout=this.logout.bind(this);
   }
   login(e){
     const email=this.refs.email.value,pass=this.refs.pass.value;
@@ -28,10 +28,39 @@ export default class Authen extends Component {
     console.log(pass);
     const auth=firebase.auth();
     auth.signInWithEmailAndPassword(email,pass)
+        .then(user=>{
+          let lout=document.getElementById('logout');
+          lout.classList.remove('hide');
+        })
         .catch(err=>{
           console.log(err.message);
           this.setState({err:err.message});
         });
+  }
+  signup(e){
+    const email=this.refs.email.value,pass=this.refs.pass.value;
+    console.log(email);
+    console.log(pass);
+    const auth=firebase.auth();
+    auth.createUserWithEmailAndPassword(email,pass)
+        .then(user=>{
+          let err="Welcome, "+user.user.email;
+          firebase.database().ref('users/'+user.user.uid).set({email:user.user.email});
+          console.log(user);
+          this.setState({err:err});
+        })
+        .catch(err=>{
+          console.log(err.message);
+          this.setState({err:err.message});
+        });
+  }
+  logout(e){
+    const auth=firebase.auth();
+    auth.signOut()
+        .then(()=>{
+          let lout=document.getElementById('logout');
+          lout.classList.add('hide');
+        })
   }
   render(){
     return(
@@ -39,9 +68,9 @@ export default class Authen extends Component {
         <input id="email" ref="email" type="email" placeholder="Enter your email"/><br/>
         <input id="pass" ref="pass" type="password" placeholder="Enter your password"/><br/>
         <p>{this.state.err}</p>
-        <button onClick={this.login}>Log In</button>
+        <button onClick={this.login} id="login">Log In</button>
         <button onClick={this.signup}>Sign Up</button>
-        <button onClick={this.logout}>Log Out</button>
+        <button onClick={this.logout} id="logout" className="hide">Log Out</button>
 
       </div>
     );
