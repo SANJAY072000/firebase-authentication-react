@@ -1,13 +1,7 @@
 import React,{Component} from 'react';
 const firebase=require('firebase');
 var firebaseConfig = {
-   apiKey: "AIzaSyBeT7Sf_XiwnDf6vR_22WLT8NX-U3U57XE",
-   authDomain: "authenticatereact.firebaseapp.com",
-   databaseURL: "https://authenticatereact.firebaseio.com",
-   projectId: "authenticatereact",
-   storageBucket: "",
-   messagingSenderId: "184241986624",
-   appId: "1:184241986624:web:3d4b7c8c0a622474"
+  
  };
  // Initialize Firebase
  firebase.initializeApp(firebaseConfig);
