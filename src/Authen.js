@@ -16,11 +16,13 @@ export default class Authen extends Component {
   constructor(props){
     super(props);
     this.state = {
-      err:''
+      err:'',
+      url:''
     };
     this.login=this.login.bind(this);
     this.signup=this.signup.bind(this);
     this.logout=this.logout.bind(this);
+    this.google=this.google.bind(this);
   }
   login(e){
     const email=this.refs.email.value,pass=this.refs.pass.value;
@@ -62,6 +64,25 @@ export default class Authen extends Component {
           lout.classList.add('hide');
         })
   }
+  google(e){
+    console.log('Redirect method');
+    let provider=new firebase.auth.GoogleAuthProvider();
+    firebase.auth().signInWithPopup(provider)
+            .then(res=>{
+              const user=res.user;
+              console.log(res);
+              firebase.database().ref(`users/${user.uid}`).set({
+                email:user.email,
+                name:user.displayName
+              });
+              this.setState({url:user.photoURL});
+            })
+            .catch(err=>{
+              let msg=err.message;
+              console.log(msg);
+            });
+
+  }
   render(){
     return(
       <div>
@@ -70,7 +91,11 @@ export default class Authen extends Component {
         <p>{this.state.err}</p>
         <button onClick={this.login} id="login">Log In</button>
         <button onClick={this.signup}>Sign Up</button>
-        <button onClick={this.logout} id="logout" className="hide">Log Out</button>
+        <button onClick={this.logout} id="logout" className="hide">Log Out</button><br/>
+        <button onClick={this.google} id="google" className="google">SignIn with google</button>
+        <br/>
+        <br/>
+        <img src={this.state.url} style={{"height":"200px","width":"200px"}}/>
 
       </div>
     );

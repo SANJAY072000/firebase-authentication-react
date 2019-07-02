@@ -85,3 +85,11 @@ p{
 .hide{
   display: none;
 }
+.google{
+  font-size: 30px;
+  background-color: #dd4b39;
+  color: #fff;
+  padding: 10px 30px;
+  margin-top: 20px;
+  margin-right: 10px;
+}
